@@ -1,0 +1,1 @@
+Aprovecho este archivo de prueba para decir que los programillas de esta carpeta corresponden a las dos que he hecho durante las primeras sesiones de teoría con Violeta (24/03 y 25/03), que a su vez corresponden a la presentación 02Computers_annotated.pdf.

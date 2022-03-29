@@ -1,0 +1,99 @@
+CHULETILLA DE LIBRERIAS Y FUNCIONES
+
+#include <stdio.h> : libreria de entrada/salida estándar
+printf() : displays onto the screen whatever is inside quotation
+
+#include <omp.h> : libreria para trabajar programando en paralelo con OpenMP. Hay que añadir comandos extra al código
+#pragma omp parallel { } : para definir la sección que queremos que funcione en paralelo, se mete dentro del main
+#pragma omp parallel private(i,j) shared(a,b) { } : lo mismo que la anterior pero además define las variables privadas y compartidas de cada thread
+#pragma omp for : bucle for que distribuye las iteraciones entre los diferentes hilos o threads 
+#pragma omp for schedule(static/dynamic) : bucle for con memoria estática o dinámica. La memoria estática es adecuada para casos sencillos en los que cada iteración requiere la misma cantidad de trabajo; mientras que la memoria dinámica es adecuada para iteraciones variables o imprevisibles, ya que reparte el trabajo entre los threads disponibles para minimizar el tiempo de ejecución
+omp_get_thread_num() : devuelve el número (int) del hilo o thread utilizado
+omp_get_wtime() : devuelve el tiempo relativo transcurrido en el reloj (float) en segs (equivalente al clock() de la libreria <time.h>)
+omp_set_num_threads(3) : establece el número de threads que utilizan las regiones paralelas (obviamente el número tiene que ser un int menor que el número de threads (8 en mi caso))
+
+#include <time.h> : libreria para manipular la fecha y hora del sistema
+clock_t : tipo de variable temporal (como int, float, double, etc)
+clock() : devuelve el numero de tics del reloj desde el lanzamiento del programa
+time = 1000.*(end - begin)/CLOCKS_PER-SEC : tiempo entre el begin y el end en ms
+
+#include <math.h> : libreria que incluye funciones matemáticas
+pow(double x, double y) : devuelve el valor de x elevado a y
+
+#include <stdlib.h> : librería que incluye las funciones de C para la gestión de la memoria dinámica, control de procesos y otras
+
+
+
+int main() { return 0;} : representa el punto de inicio de cualquier función en c
+void main() { } : lo mismo pero la función no retorna ningún valor
+- Todo el programilla se escribe dentro de las llaves
+- Dentro del paréntesis van las variables de entrada de la función
+- Al final de cada línea hay que poner ;
+- Podemos definir funciones fuera del main
+
+float mult(int a, float b){ : ejemplo de función
+  return c;}
+
+for(int i=1; i<N; i++){ : ejemplo de bucle for
+  whatever;}
+
+
+BITSHIFT (<<, >>) 
+
+"Shifts" los carácteres en binario hacia la derecha o hacia la izquierda.
+Por ej: a = 9 (00001001)
+	a<<1 = 18 (00010010); "shift" un bit hacia la izda = mult x2
+	a<<2 = 36 (00100100); "shift" 2 bits hacia la izda = mult x2²
+	a>>1 = 4 (00000100); "shift" un bit hacia la dcha = div entera x2
+	a>>2 = 2 (00000010); "shift" 2 bits hacia la dcha = div entera x2²
+
+
+CARACTERES DE CONVERSIÓN
+
+\n : newline
+\t : tabulador horizontal
+
+%d, %i : int con signo
+%u : int sin signo
+%f : float, double (6 decimales)
+%.1f : float, double (1 solo decimal,le podemos meter el número que queramos hasta 6)
+%e, %E : float, double en notación científica 
+%s : string
+%p : puntero
+
+
+
+COMANDOS PARA COMPILAR Y CORRER EN c CON gcc
+
+gcc -o p programilla.c : compila (se puede usar por ej 'exe' en vex de 'p')
+
+gcc -o p -fopenmp programilla.c : compila en paralelo usando OpenMC
+
+gcc -o p programilla.c -lm : compila incluyendo la libreria math.h
+
+./p : ejecutable que corre el programa que se acabe de compilar (si compilamos con 'exe' se corre con ./exe)
+
+
+
+PROGRAMILLAS DEL DIRECTORIO ./aco-1/theory/ (Violeta)
+
+hello.c : escribe "Hello, World!" en pantalla
+hello_openmp.c : hace que cada CPU te diga "hello world" en paralelo y te enseña qué CPU lo está diciendo
+pi.c : multiplica por 2 un cierto STARTVALUE y repite el proceso N veces. Lo hace en serie
+serial_2a.c :lo mismo y además calcula el tiempo total de la tarea usando la libreria <time.h>
+serial_b.c : lo mismo pero asignando el valor correspondiente a una variable b en cada iteración. El tiempo de ejecución es prácticamente el mismo.
+par_b.c : de nuevo multiplica por 2 varias veces un cierto STARTVALUE. Lo hace usando un bucle for en paralelo y calcula el tiempo total de la tarea usando otra vez la libreria <time.h>
+par_b_vars.c : lo mismo pero calcula el tiempo usando la propia libreria <omp.h>. No sé por qué salen tiempos bastante diferentes***
+par_b_func.c : lo mismo que la anterior pero definiendo una función fuera del main. De esta manera vemos que el tiempo de ejecución es menor
+par_b_sch.c : de nuevo lo mismo pero usando memoria estática/dinámica y fijando el número de threads para hacer el trabajo, lo que again reduce el tiempo de exposición
+
+
+PROGRAMILLAS DEL DIRECTORIO ./test_programs/theory_week1/ (yo)
+
+hello.c : escribe "Hello, World!" en pantalla
+clocks_ex.c : eleva al cubo un cierto valor usando 3 métodos distintos y comparando el tiempo de ejecución. El más lento es usar una libreria externa, puesto que tiene que cargar más cosas que las que luego realmente usa
+bitshift_ex.c : ilustra el uso del bitshift (>>,<<) con varios ejemplos
+multx2_serie.c : multiplica un cierto valor STARTVALUE x2 N veces de forma iterativa. La iteración es un recurso elegante pero no se puede paralelizar, siempre va en serie
+parallelCPU_ex.c : hace que cada CPU te diga "hello world" en paralelo y te enseña qué CPU lo está diciendo
+pi_tarea.c : calcula el número pi mediante un sumatorio de N términos, tanto en serie como en paralelo y compara los tiempos de ejecución
+
